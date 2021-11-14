@@ -1,12 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
-import Chat from './components/chat';
+import Login from './components/login';
 
 
 function App() {
   return (
     <div className="App">
-      <Chat />
+      <Login />
     </div>
   );
 }

@@ -13,3 +13,10 @@ export function getAllUsers(users) {
         payload: users,
     }
 }
+
+export function loginUser(user) {
+    return {
+        type: type.LOGIN_REQUESTED,
+        payload: user,
+    }
+}

@@ -1,5 +1,5 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
-import { getAllUsersApi, getUserApi, postUserApi, deleteUserApi } from '../../services/apiServices';
+import { getAllUsersApi, getUserApi, postUserApi, deleteUserApi, login } from '../../services/apiServices';
 
 const apiUrl = 'http://localhost:3001/lol'
 
@@ -7,12 +7,88 @@ function* fetchAllUsers(action) {
    try {
       const users = yield call(getAllUsersApi);
       console.log(users);
-      yield put({type: 'GET_ALL_USERS_SUCCESS', users: users});
+      yield put({ type: 'GET_ALL_USERS_SUCCESS', users: users });
    } catch (e) {
-      yield put({type: 'GET_ALL_USERS_FAILED', message: e.message});
+      yield put({ type: 'GET_ALL_USERS_FAILED', message: e.message });
    }
-
 }
+
+function* fetchUser(action) {
+   try {
+      const user = yield call(getUserApi);
+      yield put({ type: 'GET_USER_SUCCESS', user: user });
+   } catch (e) {
+      yield put({ type: 'GET_USER_FAILED', message: e.message });
+   }
+}
+
+function* loginUser(action) {
+   try {
+      const user = yield call(login, action.payload);
+      yield put({ type: 'LOGIN_SUCCESS', user: user.data });
+
+      // yield fetchUser();
+      console.log(user.data);
+   } catch (e) {
+      yield put({ type: 'LOGINERS_FAILED', message: e.message });
+   }
+}
+// function* fetchUser(action) {
+//    try {
+//       const user = yield call(getUserApi);
+//       yield put({type: 'GET_USER_SUCCESS', user: user});
+//    } catch (e) {
+//       yield put({type: 'GET_USER_FAILED', message: e.message});
+//    }
+// }
+// function* fetchUser(action) {
+//    try {
+//       const user = yield call(getUserApi);
+//       yield put({type: 'GET_USER_SUCCESS', user: user});
+//    } catch (e) {
+//       yield put({type: 'GET_USER_FAILED', message: e.message});
+//    }
+// }
+// function* fetchUser(action) {
+//    try {
+//       const user = yield call(getUserApi);
+//       yield put({type: 'GET_USER_SUCCESS', user: user});
+//    } catch (e) {
+//       yield put({type: 'GET_USER_FAILED', message: e.message});
+//    }
+// }
+// function* fetchUser(action) {
+//    try {
+//       const user = yield call(getUserApi);
+//       yield put({type: 'GET_USER_SUCCESS', user: user});
+//    } catch (e) {
+//       yield put({type: 'GET_USER_FAILED', message: e.message});
+//    }
+// }
+// function* fetchUser(action) {
+//    try {
+//       const user = yield call(getUserApi);
+//       yield put({type: 'GET_USER_SUCCESS', user: user});
+//    } catch (e) {
+//       yield put({type: 'GET_USER_FAILED', message: e.message});
+//    }
+// }
+// function* fetchUser(action) {
+//    try {
+//       const user = yield call(getUserApi);
+//       yield put({type: 'GET_USER_SUCCESS', user: user});
+//    } catch (e) {
+//       yield put({type: 'GET_USER_FAILED', message: e.message});
+//    }
+// }
+// function* fetchUser(action) {
+//    try {
+//       const user = yield call(getUserApi);
+//       yield put({type: 'GET_USER_SUCCESS', user: user});
+//    } catch (e) {
+//       yield put({type: 'GET_USER_FAILED', message: e.message});
+//    }
+// }
 // function* fetchUser(action) {
 //    try {
 //       const user = yield call(getUserApi);
@@ -42,6 +118,7 @@ function* fetchAllUsers(action) {
 
 function* userSaga() {
    yield takeEvery('GET_ALL_USERS_REQUESTED', fetchAllUsers);
+   yield takeEvery('LOGIN_REQUESTED', loginUser);
    // yield takeEvery('GET_USER_REQUESTED', fetchUser);
    // yield takeEvery('ADD_USER_REQUESTED', addUser);
    // yield takeEvery('DELETE_USER_REQUESTED', deleteUser);
