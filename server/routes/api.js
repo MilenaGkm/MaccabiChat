@@ -118,6 +118,8 @@ router.get("/conversations/find/:firstUserId/:secondUserId", async (req, res) =>
 
 router.post("/message", async (req, res) => {
   const newMessage = new Message(req.body);
+  // console.log(newMessage);
+  // res.end()
 
   try {
     const savedMessage = await newMessage.save();

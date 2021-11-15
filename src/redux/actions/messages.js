@@ -6,3 +6,10 @@ export function getConversationMessages(chatId) {
         payload: chatId,
     }
 }
+
+export function addNewMessage(msg) {
+    return {
+        type: type.ADD_MESSAGE_REQUESTED,
+        payload: msg,
+    }
+}

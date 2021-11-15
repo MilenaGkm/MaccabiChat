@@ -26,7 +26,7 @@ function* loginUser(action) {
       yield put({ type: 'LOGIN_SUCCESS', user: user.data });
       // return user
       // yield fetchUser();
-      console.log(user.data);
+      // console.log(user.data);
    } catch (e) {
       yield put({ type: 'LOGIN_FAILED', message: e.message });
    }

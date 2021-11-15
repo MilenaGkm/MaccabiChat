@@ -1,7 +1,7 @@
 import "./messenger.css";
 import { BrowserRouter as Router, useNavigate, } from 'react-router-dom'
 import { getUserConversations } from '../../redux/actions/conversations';
-import { getConversationMessages } from '../../redux/actions/messages';
+import { getConversationMessages, addNewMessage } from '../../redux/actions/messages';
 import { connect } from "react-redux";
 import Conversation from "../conversation/conversation";
 import Message from "../messeage/Message";
@@ -9,7 +9,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 
-const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinUser, fetchAllUsers, fetchUserConversations, fetchConversationMessages }) => {
+const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinUser, fetchAllUsers, fetchUserConversations, fetchConversationMessages, appendNewMessage }) => {
     // const [conversations, setConversations] = useState([]);
     const [currentChat, setCurrentChat] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -29,14 +29,14 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
     const handleSubmit = async (e) => {
         e.preventDefault();
         const message = {
-            sender: apiUser._id,
+            sender: apiUser.user._id,
             text: newMessage,
             conversationId: currentChat._id,
         };
 
-        const receiverId = currentChat.members.find(
-            (member) => member !== apiUser._id
-        );
+        // const receiverId = currentChat.members.find(
+        //     (member) => member !== apiUser.user._id
+        // );
 
         // socket.current.emit("sendMessage", {
         //   senderId: apiUser._id,
@@ -45,8 +45,9 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
         // });
 
         try {
-            const res = await axios.post("/messages", message);
-            setMessages([...messages, res.data]);
+            // const res = await axios.post("/messages", message);
+            await appendNewMessage(message)
+            // setMessages([...messages, res.data]);
             setNewMessage("");
         } catch (err) {
             console.log(err);
@@ -72,8 +73,8 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
                 <div className="chatMenuWrapper">
                     <input placeholder="Search for friends" className="chatMenuInput" />
                     {conversations.map((c, i) => (
-                        <div onClick={() => setCurrentChat(c)}>
-                            <Conversation key={i} conversation={c} currentUser={apiUser} />
+                        <div key={i} onClick={() => setCurrentChat(c)}>
+                            <Conversation conversation={c} currentUser={apiUser} />
                         </div>
                     ))}
                 </div>
@@ -84,8 +85,8 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
                         <>
                             <div className="chatBoxTop">
                                 {messagesA.map((m, i) => (
-                                    <div ref={scrollRef}>
-                                        <Message key={i} message={m} own={m.sender === apiUser.user._id} />
+                                    <div key={i} ref={scrollRef}>
+                                        <Message message={m} own={m.sender === apiUser.user._id} />
                                     </div>
                                 ))}
                             </div>
@@ -125,6 +126,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     fetchUserConversations: (userId) => dispatch(getUserConversations(userId)),
     fetchConversationMessages: (chatId) => dispatch(getConversationMessages(chatId)),
+    appendNewMessage: (msg) => dispatch(addNewMessage(msg)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Messenger);
