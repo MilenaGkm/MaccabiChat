@@ -8,20 +8,18 @@ import {
   Routes,
   // useNavigate,
 } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+
 
 
 function App() {
-  // console.log("lol");
   return (
     <Router>
       <div className="App">
         <Routes>
-          {/* <Login /> */}
           <Route path='/' element={<Login />} />
           <Route exact path="/messenger" element={<Messenger />} />
         </Routes>
-        {/* {!user ? <useNavigate to="/" /> : <Messenger />} */}
-        {/* </Route> */}
       </div>
     </Router>
   );
