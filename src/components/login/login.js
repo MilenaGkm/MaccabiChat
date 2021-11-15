@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, useNavigate, } from 'react-router-dom'
 import { connect } from "react-redux";
-import { getAllUsers, loginUser, addToDbUser } from '../redux/actions/users';
+import { getAllUsers, loginUser } from '../../redux/actions/users';
 
-const Login = ({ state, apiUsers, apiUser, isLoading, error, fetchAllUsers, addUser, signinUser }) => {
+const Login = ({ state, apiUser, signinUser }) => {
     const [userForm, setUserForm] = useState({ username: "", password: "" });
+    let navigate = useNavigate();
 
     const handleUserInputs = (key, value) => setUserForm({ ...userForm, [key]: value })
 
     const submitUser = async () => {
-        signinUser(userForm)
+        await signinUser(userForm)
     }
 
-    // useEffect(() => {
-    //     fetchAllUsers()
-    // }, [])
-
-    // console.log(apiUsers);
-    // console.log(apiUser);
-    console.log(state);
+    useEffect(() => {
+        if (apiUser.auth) {
+            navigate('/messenger')
+        }
+    }, [apiUser.auth])
 
     return (
+
         <div>
             <input onChange={e => handleUserInputs(e.target.name, e.target.value)}
                 name="username"
@@ -41,7 +42,7 @@ const Login = ({ state, apiUsers, apiUser, isLoading, error, fetchAllUsers, addU
 
 const mapStateToProps = (state) => ({
     apiUsers: state.users.users,
-    apiUser: state.user,
+    apiUser: state.users.user,
     isLoading: state.users.loading,
     error: state.users.error,
     state: state

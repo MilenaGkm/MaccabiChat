@@ -7,10 +7,10 @@ export function getAllUsersApi() {
     return users
 }
 
-export function getUserApi() {
-    const users = axios.post(`${urlApi}/users`);
-    return users
-}
+// export function getUserApi() {
+//     const users = axios.post(`${urlApi}/user`);
+//     return user
+// }
 
 // export async function userAuthenticated(token) {
     // console.log(token);

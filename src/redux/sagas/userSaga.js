@@ -1,7 +1,5 @@
 import { call, put, takeEvery } from 'redux-saga/effects'
-import { getAllUsersApi, getUserApi, postUserApi, deleteUserApi, login } from '../../services/apiServices';
-
-const apiUrl = 'http://localhost:3001/lol'
+import { getAllUsersApi, getUserApi, login } from '../../services/apiServices';
 
 function* fetchAllUsers(action) {
    try {
@@ -13,90 +11,26 @@ function* fetchAllUsers(action) {
    }
 }
 
-function* fetchUser(action) {
-   try {
-      const user = yield call(getUserApi);
-      yield put({ type: 'GET_USER_SUCCESS', user: user });
-   } catch (e) {
-      yield put({ type: 'GET_USER_FAILED', message: e.message });
-   }
-}
+// function* fetchUser(action) {
+//    try {
+//       const user = yield call(getUserApi);
+//       yield put({ type: 'GET_USER_SUCCESS', user: user });
+//    } catch (e) {
+//       yield put({ type: 'GET_USER_FAILED', message: e.message });
+//    }
+// }
 
 function* loginUser(action) {
    try {
       const user = yield call(login, action.payload);
       yield put({ type: 'LOGIN_SUCCESS', user: user.data });
-
+      // return user
       // yield fetchUser();
       console.log(user.data);
    } catch (e) {
-      yield put({ type: 'LOGINERS_FAILED', message: e.message });
+      yield put({ type: 'LOGIN_FAILED', message: e.message });
    }
 }
-// function* fetchUser(action) {
-//    try {
-//       const user = yield call(getUserApi);
-//       yield put({type: 'GET_USER_SUCCESS', user: user});
-//    } catch (e) {
-//       yield put({type: 'GET_USER_FAILED', message: e.message});
-//    }
-// }
-// function* fetchUser(action) {
-//    try {
-//       const user = yield call(getUserApi);
-//       yield put({type: 'GET_USER_SUCCESS', user: user});
-//    } catch (e) {
-//       yield put({type: 'GET_USER_FAILED', message: e.message});
-//    }
-// }
-// function* fetchUser(action) {
-//    try {
-//       const user = yield call(getUserApi);
-//       yield put({type: 'GET_USER_SUCCESS', user: user});
-//    } catch (e) {
-//       yield put({type: 'GET_USER_FAILED', message: e.message});
-//    }
-// }
-// function* fetchUser(action) {
-//    try {
-//       const user = yield call(getUserApi);
-//       yield put({type: 'GET_USER_SUCCESS', user: user});
-//    } catch (e) {
-//       yield put({type: 'GET_USER_FAILED', message: e.message});
-//    }
-// }
-// function* fetchUser(action) {
-//    try {
-//       const user = yield call(getUserApi);
-//       yield put({type: 'GET_USER_SUCCESS', user: user});
-//    } catch (e) {
-//       yield put({type: 'GET_USER_FAILED', message: e.message});
-//    }
-// }
-// function* fetchUser(action) {
-//    try {
-//       const user = yield call(getUserApi);
-//       yield put({type: 'GET_USER_SUCCESS', user: user});
-//    } catch (e) {
-//       yield put({type: 'GET_USER_FAILED', message: e.message});
-//    }
-// }
-// function* fetchUser(action) {
-//    try {
-//       const user = yield call(getUserApi);
-//       yield put({type: 'GET_USER_SUCCESS', user: user});
-//    } catch (e) {
-//       yield put({type: 'GET_USER_FAILED', message: e.message});
-//    }
-// }
-// function* fetchUser(action) {
-//    try {
-//       const user = yield call(getUserApi);
-//       yield put({type: 'GET_USER_SUCCESS', user: user});
-//    } catch (e) {
-//       yield put({type: 'GET_USER_FAILED', message: e.message});
-//    }
-// }
 
 // function* addUser(action) {
 //    try {
