@@ -13,3 +13,10 @@ export function addNewMessage(msg) {
         payload: msg,
     }
 }
+
+export function logout() {
+    return {
+        type: type.USER_LOGOUT,
+        // payload: msg,
+    }
+}
