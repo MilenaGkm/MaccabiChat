@@ -7,6 +7,7 @@ import Conversation from "../conversation/conversation";
 import Message from "../messeage/Message";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { io } from "socket.io-client";
 
 
 const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinUser, fetchAllUsers, fetchUserConversations, fetchConversationMessages, appendNewMessage }) => {
@@ -16,9 +17,39 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
     const [newMessage, setNewMessage] = useState("");
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
+    // const [socket, setSocket] = useState(null) 
+    const socket = useRef();
     const scrollRef = useRef();
 
     let navigate = useNavigate();
+
+    useEffect(() => {
+        socket.current = io("ws://localhost:5000")
+        socket.current.on("getMessage", data => {
+          setArrivalMessage({
+            sender: data.senderId,
+            text: data.text,
+            createdAt: Date.now(),
+          });
+        });
+      }, []);
+
+      useEffect(() => {
+        
+        arrivalMessage &&
+          currentChat?.members.includes(arrivalMessage.sender) &&
+          setMessages((prev) => [...prev, arrivalMessage]);
+      }, [arrivalMessage, currentChat]);
+
+      useEffect(() => {
+        socket.current.emit("addUser", apiUser.user._id);
+        socket.current.on("getUsers", (users) => {
+            console.log(users);
+        //   setOnlineUsers(
+        //     user.followings.filter((f) => users.some((u) => u.userId === f))
+        //   );
+        });
+      }, [apiUser.user]);
 
     useEffect(() => {
         if (!apiUser.auth) {
@@ -34,20 +65,18 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
             conversationId: currentChat._id,
         };
 
-        // const receiverId = currentChat.members.find(
-        //     (member) => member !== apiUser.user._id
-        // );
+        const receiverId = currentChat.members.find(
+            (member) => member !== apiUser.user._id
+        );
 
-        // socket.current.emit("sendMessage", {
-        //   senderId: apiUser._id,
-        //   receiverId,
-        //   text: newMessage,
-        // });
+        socket.current.emit("sendMessage", {
+          senderId: apiUser.user._id,
+          receiverId,
+          text: newMessage,
+        });
 
         try {
-            // const res = await axios.post("/messages", message);
             await appendNewMessage(message)
-            // setMessages([...messages, res.data]);
             setNewMessage("");
         } catch (err) {
             console.log(err);
@@ -57,16 +86,16 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
     useEffect(async () => {
         await fetchUserConversations(apiUser.user._id);
     }, [apiUser]);
-
+    
     useEffect(async () => {
-        await fetchConversationMessages(currentChat?._id)
+        const msgs = await fetchConversationMessages(currentChat?._id)
+       
     }, [currentChat]);
+    
+        useEffect( () => {
+            setMessages(messagesA)
+        }, [messagesA]);
 
-
-    // console.log(conversations);
-    // console.log(messagesA);
-    // console.log(state);
-    // console.log(apiUser.user._id);
     return (
         <div className="messenger">
             <div className="chatMenu">
@@ -84,7 +113,7 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
                     {currentChat ? (
                         <>
                             <div className="chatBoxTop">
-                                {messagesA.map((m, i) => (
+                                {messages.map((m, i) => (
                                     <div key={i} ref={scrollRef}>
                                         <Message message={m} own={m.sender === apiUser.user._id} />
                                     </div>

@@ -12,8 +12,6 @@ function* fetchConversationMessages(action) {
 }
 
 function* appendNewMessage(action) {
-   // console.log(action.payload);
-   // console.log(action.payload.conversationId);
    try {
       yield call(addNewMessage, action.payload);
       yield fetchConversationMessages(action.payload.conversationId);
