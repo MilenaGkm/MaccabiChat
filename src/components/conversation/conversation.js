@@ -20,15 +20,13 @@ export default function Conversation({ conversation, currentUser }) {
     getUser();
   }, [currentUser, conversation]);
 
+  console.log(user);
+
   return (
     <div className="conversation">
       <img
         className="conversationImg"
-        src={
-          user?.profilePicture
-            ? PF + user.profilePicture
-            : PF + "person/noAvatar.png"
-        }
+        src={`https://picsum.photos/seed/${user?._id}/32/32`}
         alt=""
       />
       <span className="conversationName">{user?.username}</span>

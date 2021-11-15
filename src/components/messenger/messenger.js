@@ -17,6 +17,7 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
     const [newMessage, setNewMessage] = useState("");
     const [arrivalMessage, setArrivalMessage] = useState(null);
     const [onlineUsers, setOnlineUsers] = useState([]);
+    const [userImg, setUserImg] = useState("");
     // const [socket, setSocket] = useState(null) 
     const socket = useRef();
     const scrollRef = useRef();
@@ -42,13 +43,13 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
     }, [arrivalMessage, currentChat]);
 
     useEffect(() => {
-            socket.current.emit("addUser", apiUser.user._id);
-            socket.current.on("getUsers", (users) => {
-                console.log(users);
-                //   setOnlineUsers(
-                //     user.followings.filter((f) => users.some((u) => u.userId === f))
-                //   );
-            });
+        socket.current.emit("addUser", apiUser.user._id);
+        socket.current.on("getUsers", (users) => {
+            console.log(users);
+            //   setOnlineUsers(
+            //     user.followings.filter((f) => users.some((u) => u.userId === f))
+            //   );
+        });
     }, [apiUser.user]);
 
     useEffect(() => {
@@ -87,9 +88,10 @@ const Messenger = ({ state, conversations, messagesA, apiUsers, apiUser, signinU
         await fetchUserConversations(apiUser.user._id);
     }, [apiUser]);
 
-    useEffect(async () => {
-        const msgs = await fetchConversationMessages(currentChat?._id)
-
+    useEffect(() => {
+        // (async () => {
+            const msgs = fetchConversationMessages(currentChat?._id)
+        // })()
     }, [currentChat]);
 
     useEffect(() => {
