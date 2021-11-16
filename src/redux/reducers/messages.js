@@ -42,6 +42,23 @@ export default function messages(state = initialState, action) {
                 loading: false,
                 error: action.message,
             }
+        case type.UPDATE_MESSAGE_REQUESTED:
+            return {
+                ...state,
+                loading: true,
+            }
+        case type.UPDATE_MESSAGE_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                messages: action.messages
+            }
+        case type.UPDATE_MESSAGE_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.message,
+            }
         default:
             return state
     }

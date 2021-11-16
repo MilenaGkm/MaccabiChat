@@ -1,6 +1,6 @@
 import "./message.css";
 
-export default function Message({ message, own }) {
+export default function Message({ message, own, setMessages }) {
   return (
     <div className={own ? "message own" : "message"}>
       <div className="messageTop">
@@ -11,6 +11,7 @@ export default function Message({ message, own }) {
         />
         <p className="messageText">{message.text}</p>
       </div>
+      {/* {own ? <span className="messageBottom">own</span> : < span className="messageBottom">nope</span>} */}
       {/* <div className="messageBottom">seen</div> */}
     </div>
   );

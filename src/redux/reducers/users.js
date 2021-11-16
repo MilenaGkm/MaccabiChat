@@ -45,6 +45,23 @@ export default function users(state = initialState, action) {
                 userLoading: false,
                 userError: action.message,
             }
+        case type.SIGNUP_REQUESTED:
+            return {
+                ...state,
+                userLoading: true,
+            }
+        case type.SIGNUP_SUCCESS:
+            return {
+                ...state,
+                userLoading: false,
+                user: action.user
+            }
+        case type.SIGNUP_FAILED:
+            return {
+                ...state,
+                userLoading: false,
+                userError: action.message,
+            }
         case type.GET_ALL_USERS_REQUESTED:
             return {
                 ...state,

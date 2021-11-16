@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, useNavigate, Link } from 'react-router-dom'
+import { BrowserRouter as Router, useNavigate, } from 'react-router-dom'
 import { connect } from "react-redux";
-import { getAllUsers, loginUser } from '../../redux/actions/users';
-import "./login.css"
+import { getAllUsers, signupUser } from '../../redux/actions/users';
+import "../login/login.css"
 
-const Login = ({ apiUser, signinUser }) => {
+
+const Signup = ({ apiUser, addUser }) => {
     const [userForm, setUserForm] = useState({ username: "", password: "" });
     let navigate = useNavigate();
 
     const handleUserInputs = (key, value) => setUserForm({ ...userForm, [key]: value })
 
     const submitUser = async () => {
-        await signinUser(userForm)
+        await addUser(userForm)
     }
 
     useEffect(() => {
@@ -34,6 +35,7 @@ const Login = ({ apiUser, signinUser }) => {
                     type="text"
                     name="username" />
             </div>
+
             <div class="form-field">
                 <label for="password">Password</label>
                 <input
@@ -42,14 +44,12 @@ const Login = ({ apiUser, signinUser }) => {
                     name="password" />
                 <br />
             </div>
-            <button onClick={submitUser} class="login-btn">Login</button>
-            <button onClick={() => navigate('/signup')} type="submit" class="signup-btn">Signup</button>
+            <button onClick={submitUser} class="signupBtn">Signup</button>
         </div>
     )
 }
 
 const mapStateToProps = (state) => ({
-    apiUsers: state.users.users,
     apiUser: state.users.user,
     isLoading: state.users.loading,
     error: state.users.error,
@@ -58,7 +58,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     fetchAllUsers: () => dispatch(getAllUsers()),
-    signinUser: (userForm) => dispatch(loginUser(userForm)),
+    addUser: (formUser) => dispatch(signupUser(formUser)),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

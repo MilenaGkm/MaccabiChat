@@ -13,44 +13,39 @@ export async function login(loginData) {
     return user
 }
 
+export async function signup(signupData) {
+    const user = await axios.post(`${urlApi}/signup`, signupData)
+    if (user.data.username) {
+        const auth = await axios.get(`${urlApi}/isUserAuth`, {
+            headers: {
+                "x-access-token": user.data.token
+            }
+        })
+    }
+    return user
+}
+
 export function getAllUsersApi() {
     const users = axios.get(`${urlApi}/users`);
     return users
 }
 
 export function getUserConversations(userId) {
-    // console.log(userId);
     const userConversations = axios.get(`${urlApi}/conversations/${userId}`);
-    // console.log(userConversations);
     return userConversations
 }
 
 export function getConversationMessages(chatId) {
-    // console.log(chatId);
     const conversationMessages = axios.get(`${urlApi}/message/${chatId}`);
-    // console.log(conversationMessages);
     return conversationMessages
 }
 
 export function addNewMessage(msg) {
-    console.log(msg);
     const postNewMessage = axios.post(`${urlApi}/message`, msg);
-    // console.log(conversationMessages);
     return postNewMessage
 }
 
-// export function getUserApi() {
-//     const users = axios.post(`${urlApi}/user`);
-//     return user
-// }
-
-// export async function userAuthenticated(token) {
-    // console.log(token);
-    // const auth = await axios.get(`${urlApi}/isUserAuth`, {
-    //     headers: {
-    //         "x-access-token": "Bearer " + token
-    //     }
-    // })
-    // console.log(auth);
-// }
-
+export function updateMessage(id) {
+    const putMessage = axios.put(`${urlApi}/message/${id}`);
+    return putMessage
+}

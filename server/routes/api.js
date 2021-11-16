@@ -10,8 +10,8 @@ const jwt = require('jsonwebtoken')
 
 router.get("/users", async (req, res) => {
   const users = await User.find({}, function (err, users) {
+    res.send(users)
   })
-  res.send(users)
 })
 
 router.get("/user/:userId", (req, res) => {
@@ -67,6 +67,27 @@ router.post("/login", async (req, res) => {
       })
     } else {
       res.json({ auth: false, message: "User doesn't exist" });
+    }
+  })
+})
+
+router.post("/signup", async (req, res) => {
+  const { username, password } = { ...req.body }
+  // const newUser = new User({ ...req.body })
+  // await newUser.save()
+  // res.send(newUser)
+
+  User.find({}, async (err, user) => {
+    if (user.some(u => u.username === username)) {
+      res.send("username Is Already Registered")
+    } else {
+      const newUser = new User({ username, password })
+      await newUser.save()
+      const id = newUser._id
+      const token = jwt.sign({ id }, "jwtSecret", {
+        expiresIn: 300,
+      })
+      res.json({ auth: true, token: token, user: newUser });
     }
   })
 })
@@ -128,6 +149,14 @@ router.post("/message", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// router.put("/message/:id", async (req, res) => {
+//   let id = req.params.id
+//   Message.findByIdAndUpdate(id, {seen: true}, function(err, user) {
+//     console.log(user);
+//     res.end()
+//   })
+// });
 
 //get message
 

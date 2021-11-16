@@ -20,3 +20,10 @@ export function loginUser(user) {
         payload: user,
     }
 }
+
+export function signupUser(user) {
+    return {
+        type: type.SIGNUP_REQUESTED,
+        payload: user,
+    }
+}

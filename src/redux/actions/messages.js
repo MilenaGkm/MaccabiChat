@@ -14,6 +14,13 @@ export function addNewMessage(msg) {
     }
 }
 
+export function updateMessage(id) {
+    return {
+        type: type.UPDATE_MESSAGE_REQUESTED,
+        payload: id,
+    }
+}
+
 export function logout() {
     return {
         type: type.USER_LOGOUT,
